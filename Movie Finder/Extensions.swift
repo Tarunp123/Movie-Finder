@@ -9,6 +9,8 @@
 import Foundation
 import UIKit
 import SGImageCache
+import NVActivityIndicatorView
+
 
 //MARK:- UIColor
 extension UIColor{
@@ -104,5 +106,76 @@ extension String{
     func replaceWhiteSpaceWithPlus() -> String {
         return self.componentsSeparatedByString(" ").filter { !$0.isEmpty }.joinWithSeparator("+")
     }
+    
+    func stringByAddingPercentEncodingForRFC3986() -> String? {
+        let unreserved = "-._~/?"
+        let allowed = NSMutableCharacterSet.alphanumericCharacterSet()
+        allowed.addCharactersInString(unreserved)
+        return stringByAddingPercentEncodingWithAllowedCharacters(allowed)
+    }
 }
 
+
+
+//MARK:- UIViewController
+extension UIViewController{
+    
+    func showLoadingAnimationOnRow(rowIndexPath: NSIndexPath, inTable tableView: UITableView){
+        dispatch_async(dispatch_get_main_queue()) {
+            if let cell = tableView.cellForRowAtIndexPath(rowIndexPath){
+                let activityIndicatorView = NVActivityIndicatorView(frame: CGRectMake(0, 0, 54*MF, 24*MF), type: NVActivityIndicatorType.LineScale, color: UIColor.whiteColor(), padding: 0)
+                activityIndicatorView.center = CGPointMake(activityIndicatorView.center.x, cell.contentView.center.y)
+                activityIndicatorView.color = UIColor.darkTextColor()
+                cell.accessoryView = activityIndicatorView
+                activityIndicatorView.startAnimating()
+            }
+        }
+    }
+
+    func stopLoadingAnimationOnRow(rowIndexPath: NSIndexPath, inTable tableView: UITableView){
+        dispatch_async(dispatch_get_main_queue()) {
+            if let cell = tableView.cellForRowAtIndexPath(rowIndexPath){
+                cell.accessoryView = nil
+            }
+        }
+    }
+    
+    //MARK:- Show String on White Fullscreen
+    func showTextOnFullscreenWhiteBg(string: String){
+        dispatch_async(dispatch_get_main_queue()) {
+            self.view.backgroundColor = UIColor.whiteColor()
+            let notLoggedInLabel = UILabel(frame: CGRectMake(0, 0, 394*MF, self.view.frame.height*0.6), font: UIFont.systemFontOfSize(20*MF, weight: UIFontWeightMedium), textColor: DARK_GREY_COLOR, alignment: .Center)
+            notLoggedInLabel.center = CGPointMake(self.view.frame.width/2, self.view.frame.height*0.4)
+            notLoggedInLabel.numberOfLines = 0
+            notLoggedInLabel.text = string
+            self.view.addSubview(notLoggedInLabel)
+        }
+    }
+
+    
+    func showLoadingAnimation(){
+        dispatch_async(dispatch_get_main_queue()) {
+            let activityIndicator = NVActivityIndicatorView(frame: CGRectMake(0, 0, 54*MF, 54*MF), type: NVActivityIndicatorType.BallTrianglePath, color: UIColor.whiteColor(), padding: 0)
+            activityIndicator.center = CGPointMake(self.view.center.x, self.view.center.y)
+            activityIndicator.color = UIColor.darkTextColor()
+            activityIndicator.startAnimating()
+            self.view.addSubview(activityIndicator)
+        }
+    }
+    
+    func stopLoadingAnimation(){
+        dispatch_async(dispatch_get_main_queue()) {
+            for view in self.view.subviews{
+                if view.isKindOfClass(NVActivityIndicatorView){
+                    if let activityIndicator = view as? NVActivityIndicatorView{
+                        activityIndicator.stopAnimating()
+                    }
+                }
+            }
+            
+        }
+        
+    }
+
+    
+}

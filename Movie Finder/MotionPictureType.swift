@@ -11,4 +11,5 @@ import Foundation
 
 enum MotionPictureType: String{
     case Movie = "Movie"
+    case Series = "Series"
 }

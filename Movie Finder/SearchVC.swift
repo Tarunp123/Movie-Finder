@@ -9,7 +9,7 @@
 import UIKit
 import NVActivityIndicatorView
 
-class SearchVC: UIViewController, UITextFieldDelegate, SearchModelDelegate {
+class SearchVC: UIViewController, UITextFieldDelegate, SearchModel_MotionPictureDelegate, SearchModel_SeriesDelegate {
 
     private var searchView: SearchView!
     private var searchModel: SearchModel!
@@ -41,7 +41,8 @@ class SearchVC: UIViewController, UITextFieldDelegate, SearchModelDelegate {
         
         //Model Setup
         self.searchModel = SearchModel()
-        self.searchModel.delegate = self
+        self.searchModel.motionPicture_delegate = self
+        self.searchModel.series_delegate = self
     }
     
     
@@ -55,6 +56,7 @@ class SearchVC: UIViewController, UITextFieldDelegate, SearchModelDelegate {
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         
         //Dismiss Keyboard
+        textField.resignFirstResponder()
         self.view.endEditing(true)
         
         //Check if user has entered anything in search box
@@ -62,22 +64,48 @@ class SearchVC: UIViewController, UITextFieldDelegate, SearchModelDelegate {
             return true
         }
         
-        //Start loading animation
-        self.searchView.startLoadingAnimation()
-        
-        //Pack the data in request object
         var motionPictureRequestDTO = MotionPictureRequestDTO()
         motionPictureRequestDTO.name = textField.text!
-        motionPictureRequestDTO.type = .Movie
         
-        //Ask Model to search
-        self.searchModel.findMotionPicture(motionPictureRequestDTO)
+        //Ask search type from user
+        let searchTypeAlertController = UIAlertController(title: WHAT_ARE_YOU_LOOKING_FOR, message: nil, preferredStyle: .ActionSheet)
+        let moviesAction = UIAlertAction(title: MotionPictureType.Movie.rawValue, style: .Default) { (movieAction) in
+            //Pack the data in request object
+            motionPictureRequestDTO.type = .Movie
+            self.performSearchForMotionPicture(motionPictureRequestDTO)
+        }
+        
+        let seriesAction = UIAlertAction(title: MotionPictureType.Series.rawValue, style: .Default) { (seriesAction) in
+            //Pack the data in request object
+            motionPictureRequestDTO.type = .Series
+            self.performSearchForMotionPicture(motionPictureRequestDTO)
+        }
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel) { (cancelAction) in
+            return
+        }
+        
+        searchTypeAlertController.addAction(moviesAction)
+        searchTypeAlertController.addAction(seriesAction)
+        searchTypeAlertController.addAction(cancelAction)
+        self.presentViewController(searchTypeAlertController, animated: true, completion: nil)
         
         return true
     }
     
     
+    private func performSearchForMotionPicture(motionPictureRequest: MotionPictureRequestDTO){
+        
+        //Start loading animation
+        self.searchView.startLoadingAnimation()
+        
+        //Ask Model to search
+        self.searchModel.findMotionPicture(motionPictureRequest)
+    }
     
+    
+    
+    //MARK:-SearchModel delegate methods
     func searchModel(model: SearchModel, didFindMotionPicture motionPicture: MotionPictureDTO?) {
         //Stop Loading Animation
         self.searchView.stopLoadingAnimation()
@@ -91,7 +119,7 @@ class SearchVC: UIViewController, UITextFieldDelegate, SearchModelDelegate {
         
         //Show Detail View Controller
         dispatch_async(dispatch_get_main_queue()) { 
-            let detailVC = MotionPictureDetailVC()
+            let detailVC = MotionPictureDetailVC(motionPictureRequest: nil)
             detailVC.setPictureDetails(motionPicture!)
             self.navigationController?.pushViewController(detailVC, animated: true)
         }
@@ -107,7 +135,25 @@ class SearchVC: UIViewController, UITextFieldDelegate, SearchModelDelegate {
     }
     
     
-    
+    func searchModel(model: SearchModel, didFindSeriesDetails series: SeriesDTO?) {
+        //Stop Loading Animation
+        self.searchView.stopLoadingAnimation()
+        
+        //Null Check
+        guard series != nil else{
+            //Give failure feedback to user
+            self.searchView.failureAlert()
+            return
+        }
+        
+        //Show Detail View Controller
+        dispatch_async(dispatch_get_main_queue()) {
+            let seasonSelector = SeasonSelectorVC()
+            seasonSelector.setSeries(series!)
+            self.navigationController?.pushViewController(seasonSelector, animated: true)
+        }
+    }
+
     
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
         return .LightContent

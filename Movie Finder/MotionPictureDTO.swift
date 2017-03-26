@@ -20,13 +20,13 @@ struct MotionPictureDTO {
     
     
     init(infoDictionary: [String: AnyObject]){
-        self.name = infoDictionary["Title"] as! String
-        self.genre = infoDictionary["Genre"] as? String ?? "N/A"
-        self.releaseDate = infoDictionary["Released"] as? String ?? "N/A"
-        self.plot = infoDictionary["Plot"] as? String ?? "N/A"
-        self.rating = infoDictionary["imdbRating"] as? String ?? "N/A"
-        self.votes = infoDictionary["imdbVotes"] as? String ?? "N/A"
-        self.posterImgURL = infoDictionary["Poster"] as? String ?? ""
+        self.name = infoDictionary[OMDb_RESPONSE_TITLE] as! String
+        self.genre = infoDictionary[OMDb_RESPONSE_GENRE] as? String ?? NA
+        self.releaseDate = infoDictionary[OMDb_RESPONSE_RELEASED] as? String ?? NA
+        self.plot = infoDictionary[OMDb_RESPONSE_PLOT] as? String ?? NA
+        self.rating = infoDictionary[OMDb_RESPONSE_IMDBRATING] as? String ?? NA
+        self.votes = infoDictionary[OMDb_RESPONSE_IMDBVOTES] as? String ?? NA
+        self.posterImgURL = infoDictionary[OMDb_RESPONSE_POSTER] as? String ?? ""
     }
     
 }

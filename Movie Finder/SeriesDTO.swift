@@ -9,7 +9,27 @@
 import Foundation
 
 
-struct Series {
-    var seasons: Int!
-    var seasonsAndEpisodesDictionary : [SeasonDTO : [EpisodeDTO]]
+class SeriesDTO {
+    var name : String
+    var noOfSeasons: Int!
+    var seasonsAndEpisodesMap : [Int: [EpisodeDTO]]
+    
+    
+    init(infoDictionary : [String: AnyObject]){
+        self.name = infoDictionary[OMDb_RESPONSE_TITLE] as! String
+        self.noOfSeasons = Int(infoDictionary[OMDb_RESPONSE_TOTALSEASONS] as? String ?? "") ?? 0
+        self.seasonsAndEpisodesMap = [:]
+    }
+    
+    func extractSeasonDetails(infoDictionary : [String: AnyObject]){
+        let seasonNo = Int(infoDictionary[OMDb_RESPONSE_SEASON] as! String)!
+        var episodes = [EpisodeDTO]()
+        let episodesArray = infoDictionary[OMDb_RESPONSE_EPISODES] as! NSArray
+        for index in 0..<episodesArray.count{
+            let episode = EpisodeDTO(seriesName: self.name, seasonNo: seasonNo, episodeInfoDictionary: episodesArray[index] as! [String: AnyObject])
+            episodes.append(episode)
+        }
+        self.seasonsAndEpisodesMap[seasonNo] = episodes
+    }
+    
 }

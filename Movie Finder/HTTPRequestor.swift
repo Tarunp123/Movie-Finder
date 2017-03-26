@@ -8,15 +8,6 @@
 
 import Foundation
 
-protocol HTTPRequestorDelegate: class {
-    
-    //Called after successful request is made and response is received from server. However responseData can be nil.
-    func httpRequestor(requestor: HTTPRequestor, didReceiveResponse responseData: NSData?)
-    
-    //Called if any error is encountered while making request.
-    func httpRequestor(requestor: HTTPRequestor, didEncounterError error: NSError?)
-}
-
 
 class HTTPRequestor{
     
@@ -24,7 +15,7 @@ class HTTPRequestor{
     
     
     init(URLString: String){
-        self.URL = NSURL(string: URLString ?? "")!
+        self.URL = NSURL(string: URLString) ?? NSURL(string: "")
     }
     
     
@@ -48,6 +39,7 @@ class HTTPRequestor{
             //Convert Data to Dictionary and call closure
             if let dictionary = responseData?.getDictionary() as? [String: AnyObject]{
                 closure(response: dictionary, error: error)
+                return
             }
             
             //Could not convert data to dictionary

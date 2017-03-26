@@ -8,6 +8,8 @@
 
 import UIKit
 import NVActivityIndicatorView
+import UITextField_Shake
+
 
 class SearchView: UIView {
 
@@ -59,48 +61,38 @@ class SearchView: UIView {
     private func initializeActivityIndicatorView(){
         self.activityIndicatorView = NVActivityIndicatorView(frame: CGRectMake(0, 15, 54*MF, 24*MF), type: NVActivityIndicatorType.LineScale, color: UIColor.whiteColor(), padding: 0)
         self.activityIndicatorView?.color = UIColor.darkTextColor()
-        
     }
     
     
     
     func startLoadingAnimation(){
-        if self.activityIndicatorView == nil{
-            self.initializeActivityIndicatorView()
+        dispatch_async(dispatch_get_main_queue()) {
+            if self.activityIndicatorView == nil{
+                self.initializeActivityIndicatorView()
+            }
+            self.searchTF.rightView = (self.activityIndicatorView!)
+            self.searchTF.rightViewMode = .Always
+            self.activityIndicatorView?.startAnimating()
         }
-        self.searchTF.rightView = (self.activityIndicatorView!)
-        self.searchTF.rightViewMode = .Always
-        self.activityIndicatorView?.startAnimating()
     }
     
     
     func stopLoadingAnimation(){
-        self.activityIndicatorView?.stopAnimating()
-        self.activityIndicatorView =  nil
-        self.searchTF.rightViewMode = .Never
+        dispatch_async(dispatch_get_main_queue()) {
+            self.activityIndicatorView?.stopAnimating()
+            self.activityIndicatorView =  nil
+            self.searchTF.rightViewMode = .Never
+        }
     }
 
     
-    
-    private var slideCount = 0
-    private let MAX_SLIDE = 5
-    private let slideSpeed = [0.06, 0.08, 0.08, 0.08, 0.08]
-    private let slideOffset = [5*MF, -10*MF, 10*MF, -10*MF, 5*MF]
-    
     func failureAlert() {
-        
-        UIView.animateWithDuration(self.slideSpeed[self.slideCount], animations: {
-            self.searchTF.center = CGPointMake(self.searchTF.center.x+self.slideOffset[self.slideCount], self.searchTF.center.y)
-            }) { (completed) in
-                self.slideCount += 1
-                if self.slideCount < self.MAX_SLIDE{
-                    self.failureAlert()
-                }else{
-                    self.slideCount = 0
-                }
+        dispatch_async(dispatch_get_main_queue()) { 
+            self.searchTF.shake(5, withDelta: 5*MF, speed: 0.1)
         }
         
     }
+
     
     
     required init?(coder aDecoder: NSCoder) {
