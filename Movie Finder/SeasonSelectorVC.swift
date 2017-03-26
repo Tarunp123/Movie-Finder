@@ -8,10 +8,11 @@
 
 import UIKit
 
-class SeasonSelectorVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class SeasonSelectorVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SearchModel_SeriesDelegate {
 
     private var series: SeriesDTO?
     private var seasonsTabelView : UITableView!
+    private var searchModel: SearchModel!
     
     
     func setSeries(series: SeriesDTO) {
@@ -34,6 +35,17 @@ class SeasonSelectorVC: UIViewController, UITableViewDelegate, UITableViewDataSo
         //Setup tableView
         if self.seasonsTabelView == nil{
             self.initializeTableView()
+        }
+        
+        //Initailize Model and request data if data is not already present
+        if self.searchModel == nil && self.series!.seasonsAndEpisodesMap.isEmpty{
+            self.showLoadingAnimation()
+            self.searchModel = SearchModel()
+            self.searchModel.series_delegate = self
+            var pictureRequest = MotionPictureRequestDTO()
+            pictureRequest.name = self.series!.name
+            pictureRequest.type = .Series
+            self.searchModel.findMotionPicture(pictureRequest)
         }
         
     }
@@ -83,6 +95,32 @@ class SeasonSelectorVC: UIViewController, UITableViewDelegate, UITableViewDataSo
         
     }
     
+    //MARK:- SearchModel_MotionPictureDelegate delegate methods
+
+    func searchModel(model: SearchModel, didCompleteSeriesSearch series: SeriesDTO?, withError error: NSError?) {
+        
+        //Stop Loading Animation
+        self.stopLoadingAnimation()
+        
+        guard error == nil && series != nil && series?.noOfSeasons > 0 else{
+            //No data found. Show failure.
+            self.showTextOnFullscreenWhiteBg(SEASON_DETAILS_NOT_FOUND_ERROR)
+            return
+        }
+        
+        //Data found. Save Data.
+        self.series = series
+        
+        //show data
+        dispatch_async(dispatch_get_main_queue()) {
+            self.seasonsTabelView.reloadData()
+        }
+    
+    }
+    
+        
+    
+
     
     
 }

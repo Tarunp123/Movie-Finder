@@ -76,6 +76,7 @@ class MotionPictureDetailVC: UIViewController, SearchModel_MotionPictureDelegate
             self.motionPictureDetailView.setTitle(details.name)
             self.motionPictureDetailView.setRating(details.rating)
             self.motionPictureDetailView.setVotes(details.votes)
+            self.motionPictureDetailView.setRuntimeAndReleaseDate(details.runtime, releaseDate: details.releaseDate)
             self.motionPictureDetailView.setGenre(details.genre)
             self.motionPictureDetailView.setSummary(details.plot)
         }

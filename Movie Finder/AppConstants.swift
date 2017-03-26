@@ -37,10 +37,14 @@ let STAR_ICON = "star"
 
 //MARK:- OMDb API
 let OMDb_BASE_URL = "https://www.omdbapi.com/?"
+let OMDb_REQUEST_PARAM_ID = "i"
 let OMDb_REQUEST_PARAM_TITLE = "t"
 let OMDb_REQUEST_PARAM_TYPE = "type"
 let OMDb_REQUEST_PARAM_SEASON = "Season"
 let OMDb_REQUEST_PARAM_EPISODE = "Episode"
+let OMDb_REQUEST_PARAM_PAGE = "page"
+let OMDb_REQUEST_PARAM_SEARCH = "s"
+
 let OMDb_RESPONSE_TITLE = "Title"
 let OMDb_RESPONSE_GENRE = "Genre"
 let OMDb_RESPONSE_RELEASED = "Released"
@@ -53,5 +57,9 @@ let OMDb_RESPONSE_RESPONSE = "Response"
 let OMDb_RESPONSE_EPISODES = "Episodes"
 let OMDb_RESPONSE_SEASON = "Season"
 let OMDb_RESPONSE_EPISODE = "Episode"
-
-
+let OMDb_RESPONSE_RUNTIME = "Runtime"
+let OMDb_RESPONSE_ID = "imdbID"
+let OMDb_RESPONSE_TOTALRESULTS = "totalResults"
+let OMDb_RESPONSE_SEARCH = "Search"
+let OMDb_RESPONSE_TYPE = "Type"
+let OMDb_RESPONSE_YEAR = "Year"

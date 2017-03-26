@@ -9,7 +9,7 @@
 import UIKit
 import NVActivityIndicatorView
 
-class EpisodeSelectorVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SearchMode_SeasonDelegate {
+class EpisodeSelectorVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SearchModel_SeasonDelegate {
     
     private var series: SeriesDTO?
     private var episodesTabelView : UITableView!
@@ -105,7 +105,7 @@ class EpisodeSelectorVC: UIViewController, UITableViewDelegate, UITableViewDataS
     
     
     //MARK:- SearchModel_SeasonDetail delegate methods
-    func searchModel(model: SearchModel, didSeasonDetailSearch series: SeriesDTO, withError error: NSError?) {
+    func searchModel(model: SearchModel, didCompleteSeasonDetailSearch series: SeriesDTO, withError error: NSError?) {
         //Stop Loading Animation
         self.stopLoadingAnimation()
         

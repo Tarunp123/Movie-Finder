@@ -60,7 +60,7 @@ class MotionPictureDetailView: UIView {
         self.addSubview(self.runTimeAndreleaseDateLabel)
         
         
-        self.genreLabel = UILabel(frame: CGRectMake(self.titleLabel.frame.minX, starImg.frame.maxY+16*MF, 224*MF, 50*MF), font: UIFont.systemFontOfSize(18*MF, weight: UIFontWeightSemibold), textColor: DARK_GREY_COLOR, alignment: .Left)
+        self.genreLabel = UILabel(frame: CGRectMake(self.titleLabel.frame.minX, self.runTimeAndreleaseDateLabel.frame.maxY+16*MF, 224*MF, 50*MF), font: UIFont.systemFontOfSize(18*MF, weight: UIFontWeightSemibold), textColor: DARK_GREY_COLOR, alignment: .Left)
         self.genreLabel.numberOfLines = 2
         self.addSubview(self.genreLabel)
         
@@ -76,18 +76,10 @@ class MotionPictureDetailView: UIView {
         
     }
     
-    
     func setPosterImg(imgURL: String){
         //Set poster image
-        //check if img url is http
-        //if yes then change it to https
-        var url = imgURL
-        if(!url.containsString("https://")){
-            url = url.stringByReplacingOccurrencesOfString("http://", withString: "https://")
-        }
-        self.posterImgView.setImageForURL(url)
+        self.posterImgView.setImageForURL(imgURL.getHTTPSUrlString())
     }
-    
     
     func setTitle(title: String){
         self.titleLabel.text = title

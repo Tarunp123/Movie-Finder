@@ -107,11 +107,14 @@ extension String{
         return self.componentsSeparatedByString(" ").filter { !$0.isEmpty }.joinWithSeparator("+")
     }
     
-    func stringByAddingPercentEncodingForRFC3986() -> String? {
-        let unreserved = "-._~/?"
-        let allowed = NSMutableCharacterSet.alphanumericCharacterSet()
-        allowed.addCharactersInString(unreserved)
-        return stringByAddingPercentEncodingWithAllowedCharacters(allowed)
+    //check if img url is http
+    //if yes then change it to https
+    func getHTTPSUrlString() -> String {
+        var url = self
+        if(!url.containsString("https://")){
+            url = url.stringByReplacingOccurrencesOfString("http://", withString: "https://")
+        }
+        return url
     }
 }
 
@@ -119,26 +122,6 @@ extension String{
 
 //MARK:- UIViewController
 extension UIViewController{
-    
-    func showLoadingAnimationOnRow(rowIndexPath: NSIndexPath, inTable tableView: UITableView){
-        dispatch_async(dispatch_get_main_queue()) {
-            if let cell = tableView.cellForRowAtIndexPath(rowIndexPath){
-                let activityIndicatorView = NVActivityIndicatorView(frame: CGRectMake(0, 0, 54*MF, 24*MF), type: NVActivityIndicatorType.LineScale, color: UIColor.whiteColor(), padding: 0)
-                activityIndicatorView.center = CGPointMake(activityIndicatorView.center.x, cell.contentView.center.y)
-                activityIndicatorView.color = UIColor.darkTextColor()
-                cell.accessoryView = activityIndicatorView
-                activityIndicatorView.startAnimating()
-            }
-        }
-    }
-
-    func stopLoadingAnimationOnRow(rowIndexPath: NSIndexPath, inTable tableView: UITableView){
-        dispatch_async(dispatch_get_main_queue()) {
-            if let cell = tableView.cellForRowAtIndexPath(rowIndexPath){
-                cell.accessoryView = nil
-            }
-        }
-    }
     
     //MARK:- Show String on White Fullscreen
     func showTextOnFullscreenWhiteBg(string: String){
@@ -156,7 +139,7 @@ extension UIViewController{
     func showLoadingAnimation(){
         dispatch_async(dispatch_get_main_queue()) {
             let activityIndicator = NVActivityIndicatorView(frame: CGRectMake(0, 0, 54*MF, 54*MF), type: NVActivityIndicatorType.BallTrianglePath, color: UIColor.whiteColor(), padding: 0)
-            activityIndicator.center = CGPointMake(self.view.center.x, self.view.center.y)
+            activityIndicator.center = CGPointMake(self.view.center.x, self.view.frame.height*0.4)
             activityIndicator.color = UIColor.darkTextColor()
             activityIndicator.startAnimating()
             self.view.addSubview(activityIndicator)

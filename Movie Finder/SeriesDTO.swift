@@ -14,6 +14,11 @@ class SeriesDTO {
     var noOfSeasons: Int!
     var seasonsAndEpisodesMap : [Int: [EpisodeDTO]]
     
+    init(){
+        self.name = ""
+        self.noOfSeasons = 0
+        self.seasonsAndEpisodesMap = [:]
+    }
     
     init(infoDictionary : [String: AnyObject]){
         self.name = infoDictionary[OMDb_RESPONSE_TITLE] as! String

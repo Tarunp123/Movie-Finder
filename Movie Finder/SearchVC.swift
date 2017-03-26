@@ -9,7 +9,7 @@
 import UIKit
 import NVActivityIndicatorView
 
-class SearchVC: UIViewController, UITextFieldDelegate, SearchModel_MotionPictureDelegate, SearchModel_SeriesDelegate {
+class SearchVC: UIViewController, UITextFieldDelegate, SearchModel_SeriesDelegate, SearchModel_SearchResultsDelegate {
 
     private var searchView: SearchView!
     private var searchModel: SearchModel!
@@ -41,8 +41,8 @@ class SearchVC: UIViewController, UITextFieldDelegate, SearchModel_MotionPicture
         
         //Model Setup
         self.searchModel = SearchModel()
-        self.searchModel.motionPicture_delegate = self
         self.searchModel.series_delegate = self
+        self.searchModel.searchResults_delegate = self
     }
     
     
@@ -100,31 +100,10 @@ class SearchVC: UIViewController, UITextFieldDelegate, SearchModel_MotionPicture
         self.searchView.startLoadingAnimation()
         
         //Ask Model to search
-        self.searchModel.findMotionPicture(motionPictureRequest)
+        self.searchModel.getMotionPictureSearchResults(motionPictureRequest, page: 1)
     }
     
     
-    
-    //MARK:-SearchModel_MotionPicture delegate methods
-    func searchModel(model: SearchModel, didCompleteMotionPictureSearch motionPicture: MotionPictureDTO?, withError error: NSError?) {
-        //Stop Loading Animation
-        self.searchView.stopLoadingAnimation()
-        
-        //Null Check
-        guard error == nil && motionPicture != nil else{
-            //Give failure feedback to user
-            self.searchView.failureAlert()
-            return
-        }
-        
-        //Show Detail View Controller
-        dispatch_async(dispatch_get_main_queue()) {
-            let detailVC = MotionPictureDetailVC(motionPictureRequest: nil)
-            detailVC.setPictureDetails(motionPicture!)
-            self.navigationController?.pushViewController(detailVC, animated: true)
-        }
-    }
-   
     
     //MARK:-SearchModel_Series delegate methods
     func searchModel(model: SearchModel, didCompleteSeriesSearch series: SeriesDTO?, withError error: NSError?) {
@@ -146,6 +125,27 @@ class SearchVC: UIViewController, UITextFieldDelegate, SearchModel_MotionPicture
         }
 
     }
+    
+    
+    //MARK:- SearchModel_SearchResults delegate methods
+    func searchModel(model: SearchModel, didCompleteMotionPictureSearchWithResults results: [MotionPictureSummaryDTO], totalResultsAvailable total: Int, forRequest request: MotionPictureRequestDTO, withError error: NSError?) {
+        
+        //Stop Loading Animation
+        self.searchView.stopLoadingAnimation()
+        
+        guard error == nil && results.count > 0 else{
+            //Give failure feedback to user
+            self.searchView.failureAlert()
+            return
+        }
+        
+        dispatch_async(dispatch_get_main_queue()) {
+            let pictureSearchResultsVC = MotionPictureSearchResultsVC(pictureRequest: request)
+            pictureSearchResultsVC.setPictureResults(results, andTotalResults: total)
+            self.navigationController?.pushViewController(pictureSearchResultsVC, animated: true)
+        }
+    }
+    
     
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
         return .LightContent

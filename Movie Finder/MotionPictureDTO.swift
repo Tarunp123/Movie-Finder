@@ -17,6 +17,8 @@ struct MotionPictureDTO {
     var rating: String
     var votes: String
     var posterImgURL: String
+    var runtime : String
+    var type: MotionPictureType?
     
     
     init(infoDictionary: [String: AnyObject]){
@@ -27,6 +29,8 @@ struct MotionPictureDTO {
         self.rating = infoDictionary[OMDb_RESPONSE_IMDBRATING] as? String ?? NA
         self.votes = infoDictionary[OMDb_RESPONSE_IMDBVOTES] as? String ?? NA
         self.posterImgURL = infoDictionary[OMDb_RESPONSE_POSTER] as? String ?? ""
+        self.runtime = infoDictionary[OMDb_RESPONSE_RUNTIME] as? String ?? NA
+        self.type = MotionPictureType(rawValue: ((infoDictionary[OMDb_RESPONSE_TYPE] as! String).capitalizedString))
     }
     
 }

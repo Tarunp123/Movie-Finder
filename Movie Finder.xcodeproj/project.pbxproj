@@ -12,6 +12,10 @@
 		C304305D1E86823B0099EF3B /* SeriesDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = C304305C1E86823B0099EF3B /* SeriesDTO.swift */; };
 		C30430611E8682C80099EF3B /* EpisodeDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = C30430601E8682C80099EF3B /* EpisodeDTO.swift */; };
 		C30430661E86BFC40099EF3B /* MotionPictureDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C30430651E86BFC40099EF3B /* MotionPictureDetailView.swift */; };
+		C321C1F81E880EDC0083A72B /* MotionPictureSearchResultsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C321C1F71E880EDC0083A72B /* MotionPictureSearchResultsVC.swift */; };
+		C321C1FB1E880FF50083A72B /* MotionPictureSummaryTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C321C1FA1E880FF50083A72B /* MotionPictureSummaryTVC.swift */; };
+		C321C1FD1E8814C60083A72B /* MotionPictureSearchResultsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C321C1FC1E8814C60083A72B /* MotionPictureSearchResultsModel.swift */; };
+		C321C1FF1E8815660083A72B /* MotionPictureSummaryDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = C321C1FE1E8815660083A72B /* MotionPictureSummaryDTO.swift */; };
 		C346CA491E81863900956ED1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C346CA481E81863900956ED1 /* AppDelegate.swift */; };
 		C346CA4E1E81863900956ED1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C346CA4C1E81863900956ED1 /* Main.storyboard */; };
 		C346CA501E81863900956ED1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C346CA4F1E81863900956ED1 /* Assets.xcassets */; };
@@ -55,6 +59,10 @@
 		C304305C1E86823B0099EF3B /* SeriesDTO.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SeriesDTO.swift; sourceTree = "<group>"; };
 		C30430601E8682C80099EF3B /* EpisodeDTO.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EpisodeDTO.swift; sourceTree = "<group>"; };
 		C30430651E86BFC40099EF3B /* MotionPictureDetailView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MotionPictureDetailView.swift; sourceTree = "<group>"; };
+		C321C1F71E880EDC0083A72B /* MotionPictureSearchResultsVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MotionPictureSearchResultsVC.swift; sourceTree = "<group>"; };
+		C321C1FA1E880FF50083A72B /* MotionPictureSummaryTVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MotionPictureSummaryTVC.swift; sourceTree = "<group>"; };
+		C321C1FC1E8814C60083A72B /* MotionPictureSearchResultsModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MotionPictureSearchResultsModel.swift; sourceTree = "<group>"; };
+		C321C1FE1E8815660083A72B /* MotionPictureSummaryDTO.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MotionPictureSummaryDTO.swift; sourceTree = "<group>"; };
 		C346CA451E81863900956ED1 /* Movie Finder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Movie Finder.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C346CA481E81863900956ED1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C346CA4D1E81863900956ED1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -142,6 +150,41 @@
 			name = View;
 			sourceTree = "<group>";
 		};
+		C321C1F61E880E520083A72B /* MotionPictureSearchResults */ = {
+			isa = PBXGroup;
+			children = (
+				C321C2001E8860530083A72B /* Model */,
+				C321C1F91E880EE10083A72B /* Controller */,
+				C321C2011E88605B0083A72B /* View */,
+			);
+			name = MotionPictureSearchResults;
+			sourceTree = "<group>";
+		};
+		C321C1F91E880EE10083A72B /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				C321C1F71E880EDC0083A72B /* MotionPictureSearchResultsVC.swift */,
+			);
+			name = Controller;
+			sourceTree = "<group>";
+		};
+		C321C2001E8860530083A72B /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				C321C1FC1E8814C60083A72B /* MotionPictureSearchResultsModel.swift */,
+				C321C1FE1E8815660083A72B /* MotionPictureSummaryDTO.swift */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		C321C2011E88605B0083A72B /* View */ = {
+			isa = PBXGroup;
+			children = (
+				C321C1FA1E880FF50083A72B /* MotionPictureSummaryTVC.swift */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
 		C346CA3C1E81863900956ED1 = {
 			isa = PBXGroup;
 			children = (
@@ -172,6 +215,7 @@
 				C347645F1E8447A30022860F /* MotionPictureDetails */,
 				C3DE00C81E87072100DDC137 /* SeasonSelector */,
 				C397213C1E87881E00845549 /* EpisodeSelector */,
+				C321C1F61E880E520083A72B /* MotionPictureSearchResults */,
 				C346CA4C1E81863900956ED1 /* Main.storyboard */,
 				C346CA4F1E81863900956ED1 /* Assets.xcassets */,
 				C346CA511E81863900956ED1 /* LaunchScreen.storyboard */,
@@ -207,6 +251,7 @@
 				C347645A1E8446DB0022860F /* AppConstants.swift */,
 				C34764581E8440950022860F /* Enums */,
 				C34764551E8440390022860F /* DTO */,
+				C34764621E8447D40022860F /* Model */,
 			);
 			name = Global;
 			sourceTree = "<group>";
@@ -269,7 +314,6 @@
 			children = (
 				C30430621E869BEA0099EF3B /* Controller */,
 				C30430631E869BF20099EF3B /* View */,
-				C34764621E8447D40022860F /* Model */,
 			);
 			name = SearchScreen;
 			sourceTree = "<group>";
@@ -495,14 +539,18 @@
 				C34764681E84570A0022860F /* MotionPictureRequestDTO.swift in Sources */,
 				C34764711E86532A0022860F /* SearchView.swift in Sources */,
 				C347645E1E8447380022860F /* Extensions.swift in Sources */,
+				C321C1FF1E8815660083A72B /* MotionPictureSummaryDTO.swift in Sources */,
 				C34764571E8440820022860F /* MotionPictureType.swift in Sources */,
 				C30430661E86BFC40099EF3B /* MotionPictureDetailView.swift in Sources */,
 				C34764741E8654D20022860F /* GlobalData.swift in Sources */,
 				C304305D1E86823B0099EF3B /* SeriesDTO.swift in Sources */,
 				C397213E1E87884C00845549 /* EpisodeSelectorVC.swift in Sources */,
+				C321C1FD1E8814C60083A72B /* MotionPictureSearchResultsModel.swift in Sources */,
 				C346CA491E81863900956ED1 /* AppDelegate.swift in Sources */,
+				C321C1F81E880EDC0083A72B /* MotionPictureSearchResultsVC.swift in Sources */,
 				C35FA4C31E86C56C001D496C /* MotionPictureDetailVC.swift in Sources */,
 				C304305B1E8680010099EF3B /* SearchModel.swift in Sources */,
+				C321C1FB1E880FF50083A72B /* MotionPictureSummaryTVC.swift in Sources */,
 				C347645B1E8446DB0022860F /* AppConstants.swift in Sources */,
 				C3DE00CA1E87075D00DDC137 /* SeasonSelectorVC.swift in Sources */,
 				C347646A1E84579C0022860F /* MotionPictureDTO.swift in Sources */,
