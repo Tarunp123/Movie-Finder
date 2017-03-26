@@ -105,42 +105,34 @@ class SearchVC: UIViewController, UITextFieldDelegate, SearchModel_MotionPicture
     
     
     
-    //MARK:-SearchModel delegate methods
-    func searchModel(model: SearchModel, didFindMotionPicture motionPicture: MotionPictureDTO?) {
+    //MARK:-SearchModel_MotionPicture delegate methods
+    func searchModel(model: SearchModel, didCompleteMotionPictureSearch motionPicture: MotionPictureDTO?, withError error: NSError?) {
         //Stop Loading Animation
         self.searchView.stopLoadingAnimation()
         
         //Null Check
-        guard motionPicture != nil else{
+        guard error == nil && motionPicture != nil else{
             //Give failure feedback to user
             self.searchView.failureAlert()
             return
         }
         
         //Show Detail View Controller
-        dispatch_async(dispatch_get_main_queue()) { 
+        dispatch_async(dispatch_get_main_queue()) {
             let detailVC = MotionPictureDetailVC(motionPictureRequest: nil)
             detailVC.setPictureDetails(motionPicture!)
             self.navigationController?.pushViewController(detailVC, animated: true)
         }
     }
+   
     
-    
-    func searchModel(model: SearchModel, didEncounterError error: NSError?) {
-        //Stop Loading Animation
-        self.searchView.stopLoadingAnimation()
-        
-        //Give failure feedback to user
-        self.searchView.failureAlert()
-    }
-    
-    
-    func searchModel(model: SearchModel, didFindSeriesDetails series: SeriesDTO?) {
+    //MARK:-SearchModel_Series delegate methods
+    func searchModel(model: SearchModel, didCompleteSeriesSearch series: SeriesDTO?, withError error: NSError?) {
         //Stop Loading Animation
         self.searchView.stopLoadingAnimation()
         
         //Null Check
-        guard series != nil else{
+        guard error == nil && series != nil && series?.noOfSeasons > 0 else{
             //Give failure feedback to user
             self.searchView.failureAlert()
             return
@@ -152,8 +144,8 @@ class SearchVC: UIViewController, UITextFieldDelegate, SearchModel_MotionPicture
             seasonSelector.setSeries(series!)
             self.navigationController?.pushViewController(seasonSelector, animated: true)
         }
-    }
 
+    }
     
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
         return .LightContent

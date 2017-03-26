@@ -104,12 +104,12 @@ class EpisodeSelectorVC: UIViewController, UITableViewDelegate, UITableViewDataS
     
     
     
-    func searchModel(model: SearchModel, didFindSeasonDetailsForSeries series: SeriesDTO) {
-        
+    //MARK:- SearchModel_SeasonDetail delegate methods
+    func searchModel(model: SearchModel, didSeasonDetailSearch series: SeriesDTO, withError error: NSError?) {
         //Stop Loading Animation
         self.stopLoadingAnimation()
         
-        guard series.seasonsAndEpisodesMap[self.selectedSeason] != nil else{
+        guard error == nil && series.seasonsAndEpisodesMap[self.selectedSeason] != nil else{
             //No data found. Show failure.
             self.showTextOnFullscreenWhiteBg(SEASON_DETAILS_NOT_FOUND_ERROR)
             return
@@ -123,15 +123,6 @@ class EpisodeSelectorVC: UIViewController, UITableViewDelegate, UITableViewDataS
             self.episodesTabelView.reloadData()
         }
         
-    }
-    
-    func searchModel(model: SearchModel, didEncounterError error: NSError?) {
-        
-        //Stop Loading Animation
-        self.stopLoadingAnimation()
-        
-        //Error. Show failure
-        self.showTextOnFullscreenWhiteBg(SEASON_DETAILS_NOT_FOUND_ERROR)
     }
     
         

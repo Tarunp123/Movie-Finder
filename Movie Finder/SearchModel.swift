@@ -9,17 +9,15 @@
 import Foundation
 
 protocol SearchModel_MotionPictureDelegate: class {
-    func searchModel(model: SearchModel, didFindMotionPicture motionPicture: MotionPictureDTO?)
-    func searchModel(model: SearchModel, didEncounterError error: NSError?)
+    func searchModel(model: SearchModel, didCompleteMotionPictureSearch motionPicture: MotionPictureDTO?, withError error: NSError?)
 }
 
 protocol SearchModel_SeriesDelegate: class {
-    func searchModel(model: SearchModel, didFindSeriesDetails series: SeriesDTO?)
+    func searchModel(model: SearchModel, didCompleteSeriesSearch series: SeriesDTO?, withError error: NSError?)
 }
 
 protocol SearchMode_SeasonDelegate:class {
-    func searchModel(model: SearchModel, didFindSeasonDetailsForSeries series: SeriesDTO)
-    func searchModel(model: SearchModel, didEncounterError error: NSError?)
+    func searchModel(model: SearchModel, didSeasonDetailSearch series: SeriesDTO, withError error: NSError?)
 }
 
 
@@ -52,31 +50,38 @@ class SearchModel: NSObject {
             self.httpRequestor = HTTPRequestor(URLString: urlString)
             self.httpRequestor?.makeRequest({ (response, error) in
                 
-                //Error and NUll Check
-                guard error == nil && response != nil else{
-                    self.motionPicture_delegate?.searchModel(self, didEncounterError: error)
+                //Error, Null Check and Empty check
+                guard error == nil && response != nil && !response!.isEmpty else{
+                    self.motionPicture_delegate?.searchModel(self, didCompleteMotionPictureSearch: nil, withError: error)
+                    if self.motionPicture_delegate == nil{
+                        self.series_delegate?.searchModel(self, didCompleteSeriesSearch: nil, withError: error)
+                    }
                     return
                 }
                 
-                //Checking if response object actually contains any data
-                if response![OMDb_RESPONSE_RESPONSE] as! String == "False"{
-                    self.motionPicture_delegate?.searchModel(self, didEncounterError: error)
+                
+                //Checking if response object actually contains any data & if response object is valid
+                guard response![OMDb_RESPONSE_RESPONSE] as! String == "True" else{
+                    self.motionPicture_delegate?.searchModel(self, didCompleteMotionPictureSearch: nil, withError: error)
+                    if self.motionPicture_delegate == nil{
+                        self.series_delegate?.searchModel(self, didCompleteSeriesSearch: nil, withError: error)
+                    }
                     return
                 }
                 
                 //Success! Inform the delegate
                 if motionPicture.type == .Movie{    //If movie was searched
                     let motionPictureDTO = MotionPictureDTO(infoDictionary: response!)
-                    self.motionPicture_delegate?.searchModel(self, didFindMotionPicture: motionPictureDTO)
+                    self.motionPicture_delegate?.searchModel(self, didCompleteMotionPictureSearch: motionPictureDTO, withError: nil)
                 }else if motionPicture.type == .Series{
                     if motionPicture.seasonNo != nil{
                         //If Episode was searched.
                         let motionPictureDTO = MotionPictureDTO(infoDictionary: response!)
-                        self.motionPicture_delegate?.searchModel(self, didFindMotionPicture: motionPictureDTO)
+                        self.motionPicture_delegate?.searchModel(self, didCompleteMotionPictureSearch: motionPictureDTO, withError: nil)
                     }else{
                         //If series was searched
                         let seriesDTO = SeriesDTO(infoDictionary: response!)
-                        self.series_delegate?.searchModel(self, didFindSeriesDetails: seriesDTO)
+                        self.series_delegate?.searchModel(self, didCompleteSeriesSearch: seriesDTO, withError: nil)
                     }
                 }
             })
@@ -96,15 +101,15 @@ class SearchModel: NSObject {
             self.httpRequestor = HTTPRequestor(URLString: urlString)
             self.httpRequestor?.makeRequest({ (response, error) in
                 
-                //Error and NUll Check
-                guard error == nil && response != nil else{
-                    self.season_delegate?.searchModel(self, didEncounterError: error)
+                //Error, Null Check and Empty check
+                guard error == nil && response != nil && !response!.isEmpty else{
+                    self.season_delegate?.searchModel(self, didSeasonDetailSearch: series, withError: error)
                     return
                 }
                 
                 //Checking if response object actually contains any data
-                if response![OMDb_RESPONSE_RESPONSE] as! String == "False"{
-                    self.season_delegate?.searchModel(self, didEncounterError: error)
+                guard response![OMDb_RESPONSE_RESPONSE] as! String == "True" else{
+                    self.season_delegate?.searchModel(self, didSeasonDetailSearch: series, withError: error)
                     return
                 }
 
@@ -112,7 +117,7 @@ class SearchModel: NSObject {
                 series.extractSeasonDetails(response!)
                 
                 //Inform the delegate
-                self.season_delegate?.searchModel(self, didFindSeasonDetailsForSeries: series)
+                self.season_delegate?.searchModel(self, didSeasonDetailSearch: series, withError: nil)
                 
             })
         

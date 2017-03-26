@@ -28,20 +28,13 @@ class MotionPictureDetailVC: UIViewController, SearchModel_MotionPictureDelegate
     }
     
     
-    private var pictureDetails: MotionPictureDTO?{
-        didSet{
-            if self.pictureDetails != nil{
-                self.initializeViews()
-            }
-        }
-    }
+    private var pictureDetails: MotionPictureDTO?
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController?.delegate = self
         self.view.backgroundColor = PAPER_COLOR
-        //self.startingPoint()
     }
 
     
@@ -98,24 +91,25 @@ class MotionPictureDetailVC: UIViewController, SearchModel_MotionPictureDelegate
     
     
     //MARK:- SearchModel delegate methods
-    func searchModel(model: SearchModel, didFindMotionPicture motionPicture: MotionPictureDTO?) {
+    func searchModel(model: SearchModel, didCompleteMotionPictureSearch motionPicture: MotionPictureDTO?, withError error: NSError?) {
         //stop loading animation
         self.stopLoadingAnimation()
         
-        //Save the data
+        //Handle failure
+        guard error == nil && motionPicture != nil else{
+            self.showTextOnFullscreenWhiteBg(ERROR_TRY_AGAIN_LATER)
+            return
+        }
+        
+        //Save the data and load view
         self.pictureDetails = motionPicture
-        
+        self.initializeViews()
     }
     
-    func searchModel(model: SearchModel, didEncounterError error: NSError?) {
-        //stop loading animation
-        self.stopLoadingAnimation()
-        
-        //Show failure
-        self.showTextOnFullscreenWhiteBg(ERROR_TRY_AGAIN_LATER)
-    }
     
+    //MARK:- NavigationController delegate methods
     func navigationController(navigationController: UINavigationController, didShowViewController viewController: UIViewController, animated: Bool) {
         self.startingPoint()
     }
+    
 }
