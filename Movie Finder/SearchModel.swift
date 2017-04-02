@@ -45,15 +45,16 @@ class SearchModel: NSObject {
         let backgroundQueue = dispatch_get_global_queue(qualityOfServiceClass, 0)
         dispatch_async(backgroundQueue, {
             var urlString = ""
+            let pictureIDOrNameParam = (motionPicture.id == nil) ? OMDb_REQUEST_PARAM_TITLE + "=" + motionPicture.name.replaceWhiteSpaceWithPlus() : OMDb_REQUEST_PARAM_ID + "=" + motionPicture.id!
             if motionPicture.type == .Movie{
-                urlString = OMDb_BASE_URL + OMDb_REQUEST_PARAM_TITLE + "=" + motionPicture.name.replaceWhiteSpaceWithPlus() + "&" + OMDb_REQUEST_PARAM_TYPE + "=" + motionPicture.type.rawValue
+                urlString = OMDb_BASE_URL + pictureIDOrNameParam + "&" + OMDb_REQUEST_PARAM_TYPE + "=" + motionPicture.type.rawValue
             }else if motionPicture.type == .Series{
                 if let seasonNo = motionPicture.seasonNo, let episodeNo = motionPicture.episodeNo{
                     //If episode was searched
-                    urlString = OMDb_BASE_URL + OMDb_REQUEST_PARAM_TITLE + "=" + motionPicture.name.replaceWhiteSpaceWithPlus() + "&" + OMDb_REQUEST_PARAM_TYPE + "=" + motionPicture.type.rawValue + "&" + OMDb_REQUEST_PARAM_SEASON + "=" + "\(seasonNo)" + "&" + OMDb_REQUEST_PARAM_EPISODE + "=" + "\(episodeNo)"
+                    urlString = OMDb_BASE_URL + pictureIDOrNameParam + "&" + OMDb_REQUEST_PARAM_TYPE + "=" + motionPicture.type.rawValue + "&" + OMDb_REQUEST_PARAM_SEASON + "=" + "\(seasonNo)" + "&" + OMDb_REQUEST_PARAM_EPISODE + "=" + "\(episodeNo)"
                 }else{
                     //If series was searched
-                    urlString = OMDb_BASE_URL + OMDb_REQUEST_PARAM_TITLE + "=" + motionPicture.name.replaceWhiteSpaceWithPlus() + "&" + OMDb_REQUEST_PARAM_TYPE + "=" + motionPicture.type.rawValue
+                    urlString = OMDb_BASE_URL + pictureIDOrNameParam + "&" + OMDb_REQUEST_PARAM_TYPE + "=" + motionPicture.type.rawValue
                 }
             }
             self.httpRequestor = HTTPRequestor(URLString: urlString)
@@ -105,7 +106,8 @@ class SearchModel: NSObject {
         let backgroundQueue = dispatch_get_global_queue(qualityOfServiceClass, 0)
         dispatch_async(backgroundQueue, {
         
-            let urlString = OMDb_BASE_URL + OMDb_REQUEST_PARAM_TITLE + "=" + series.name.replaceWhiteSpaceWithPlus() + "&" + OMDb_REQUEST_PARAM_SEASON + "=" + "\(seasonNo)"
+            let pictureIDOrNameParam = (series.id == nil) ? OMDb_REQUEST_PARAM_TITLE + "=" + series.name.replaceWhiteSpaceWithPlus() : OMDb_REQUEST_PARAM_ID + "=" + series.id!
+            let urlString = OMDb_BASE_URL + pictureIDOrNameParam + "&" + OMDb_REQUEST_PARAM_SEASON + "=" + "\(seasonNo)"
             
             self.httpRequestor = HTTPRequestor(URLString: urlString)
             self.httpRequestor?.makeRequest({ (response, error) in

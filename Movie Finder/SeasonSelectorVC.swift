@@ -43,6 +43,7 @@ class SeasonSelectorVC: UIViewController, UITableViewDelegate, UITableViewDataSo
             self.searchModel = SearchModel()
             self.searchModel.series_delegate = self
             var pictureRequest = MotionPictureRequestDTO()
+            pictureRequest.id = self.series?.id
             pictureRequest.name = self.series!.name
             pictureRequest.type = .Series
             self.searchModel.findMotionPicture(pictureRequest)

@@ -95,6 +95,7 @@ class EpisodeSelectorVC: UIViewController, UITableViewDelegate, UITableViewDataS
         tableView.cellForRowAtIndexPath(indexPath)?.selected = false
         
         var pictureRequest = MotionPictureRequestDTO()
+        pictureRequest.id = self.series?.id
         pictureRequest.name = self.series?.name
         pictureRequest.type = .Series
         pictureRequest.seasonNo = self.selectedSeason

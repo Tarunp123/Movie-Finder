@@ -10,6 +10,7 @@ import Foundation
 
 
 struct MotionPictureRequestDTO {
+    var id: String?
     var name: String!
     var type: MotionPictureType!
     var seasonNo: Int?

@@ -10,6 +10,7 @@ import Foundation
 
 
 struct EpisodeDTO {
+    var seriesId: String?
     var seriesName : String!
     var seasonNo: Int!
     var episodeNo: Int!
@@ -18,7 +19,8 @@ struct EpisodeDTO {
     var rating: String!
     
     
-    init(seriesName: String, seasonNo: Int, episodeInfoDictionary: [String: AnyObject]){
+    init(seriesId: String?, seriesName: String, seasonNo: Int, episodeInfoDictionary: [String: AnyObject]){
+        self.seriesId = seriesId
         self.seriesName = seriesName
         self.seasonNo = seasonNo
         self.title = episodeInfoDictionary[OMDb_RESPONSE_TITLE] as! String

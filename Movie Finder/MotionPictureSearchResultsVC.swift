@@ -110,6 +110,7 @@ class MotionPictureSearchResultsVC: UITableViewController, MotionPictureSearchRe
         let pictureSummary = self.searchResultsModel.getMotionPictureSummaryAtIndex(indexPath.row)
         
         var pictureRequest = MotionPictureRequestDTO()
+        pictureRequest.id = pictureSummary?.id
         pictureRequest.name = pictureSummary?.name
         pictureRequest.type = pictureSummary?.type
         dispatch_async(dispatch_get_main_queue()) {
@@ -117,6 +118,7 @@ class MotionPictureSearchResultsVC: UITableViewController, MotionPictureSearchRe
                 self.navigationController?.pushViewController(MotionPictureDetailVC(motionPictureRequest: pictureRequest), animated: true)
             }else if self.motionPictureRequest.type == .Series{
                 let series = SeriesDTO()
+                series.id = pictureSummary?.id
                 series.name = pictureSummary!.name
                 
                 let seasonSelector = SeasonSelectorVC()
