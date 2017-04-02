@@ -6,6 +6,7 @@
 //  Copyright © 2017 Tarun Prajapati. All rights reserved.
 //
 
+
 import UIKit
 
 class MotionPictureDetailVC: UIViewController, SearchModel_MotionPictureDelegate, UINavigationControllerDelegate {

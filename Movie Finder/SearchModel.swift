@@ -29,6 +29,7 @@ protocol SearchModel_SearchResultsDelegate: class {
 }
 
 
+
 class SearchModel: NSObject {
 
     private var httpRequestor : HTTPRequestor?
@@ -45,7 +46,9 @@ class SearchModel: NSObject {
         let backgroundQueue = dispatch_get_global_queue(qualityOfServiceClass, 0)
         dispatch_async(backgroundQueue, {
             var urlString = ""
+            //Search by ID if possible else use picture name
             let pictureIDOrNameParam = (motionPicture.id == nil) ? OMDb_REQUEST_PARAM_TITLE + "=" + motionPicture.name.replaceWhiteSpaceWithPlus() : OMDb_REQUEST_PARAM_ID + "=" + motionPicture.id!
+            
             if motionPicture.type == .Movie{
                 urlString = OMDb_BASE_URL + pictureIDOrNameParam + "&" + OMDb_REQUEST_PARAM_TYPE + "=" + motionPicture.type.rawValue
             }else if motionPicture.type == .Series{
@@ -105,9 +108,10 @@ class SearchModel: NSObject {
         let qualityOfServiceClass = QOS_CLASS_BACKGROUND
         let backgroundQueue = dispatch_get_global_queue(qualityOfServiceClass, 0)
         dispatch_async(backgroundQueue, {
-        
-            let pictureIDOrNameParam = (series.id == nil) ? OMDb_REQUEST_PARAM_TITLE + "=" + series.name.replaceWhiteSpaceWithPlus() : OMDb_REQUEST_PARAM_ID + "=" + series.id!
-            let urlString = OMDb_BASE_URL + pictureIDOrNameParam + "&" + OMDb_REQUEST_PARAM_SEASON + "=" + "\(seasonNo)"
+            
+            //Search by ID if possible else use series name
+            let seriesIDOrNameParam = (series.id == nil) ? OMDb_REQUEST_PARAM_TITLE + "=" + series.name.replaceWhiteSpaceWithPlus() : OMDb_REQUEST_PARAM_ID + "=" + series.id!
+            let urlString = OMDb_BASE_URL + seriesIDOrNameParam + "&" + OMDb_REQUEST_PARAM_SEASON + "=" + "\(seasonNo)"
             
             self.httpRequestor = HTTPRequestor(URLString: urlString)
             self.httpRequestor?.makeRequest({ (response, error) in

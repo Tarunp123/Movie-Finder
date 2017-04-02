@@ -5,11 +5,12 @@
 //  Created by Tarun Prajapati on 24/03/17.
 //  Copyright © 2017 Tarun Prajapati. All rights reserved.
 //
+//
 
 import Foundation
 
 struct MotionPictureDTO {
-
+    
     var name: String
     var genre: String
     var releaseDate: String
